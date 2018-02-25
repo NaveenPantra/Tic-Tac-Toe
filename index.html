@@ -1,0 +1,67 @@
+<!-- Tic Tac Toe HTML -->
+
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Tic-Tac-Toe</title>
+        <meta name="description" content="Simple Tic-Tac-Toe game in JavaScript">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="manifest" href="site.webmanifest">
+        <link rel="shortcut icon" type="image/png" href="img/ox.png">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+        <div class="main">
+            <h1><span class="symbol">'0'  &lsaquo;&lsaquo; </span>Tic Tac Toe  <span class="symbol">&rsaquo;&rsaquo;  'X'</span></h1>
+        </div>
+
+        <table class="container">
+            <tr id="0r">
+                <td id="0-0"></td>
+                <td class="ver" id="0-1"></td>
+                <td id="0-2"></td>
+            </tr>
+            <tr id="1r">
+                <td class="hor" id="1-0"></td>
+                <td class="ver hor" id="1-1"></td>
+                <td class="hor" id="1-2"></td>
+            </tr>
+            <tr id="2r">
+                <td id="2-0"></td>
+                <td class="ver" id="2-1"></td>
+                <td id="2-2"></td>
+            </tr>
+        </table>
+        <div class="result">
+            <p class="won"></p><br>
+            <p class="loss"></p>
+            <p class="tie"><i class="ion-stop">  </i> 'o' tied with 'x'  </p>
+        </div>
+        <div class="reset">
+            <button onclick="gameController.reset()">Reset..!</button>
+        </div>
+        <div class="link">
+          <p>Github Hoisting.</p>
+          <a href="https://naveenpantra.github.io/Tic-Tac-Toe-JS/" class="link__git">Tic-Tac-Toe &rarr;</a>
+          <p>(or)</p>
+          <a href="https://github.com/NaveenPantra" class="link__git">Visit me @ Github &rarr;</a>
+        </div>
+
+
+        <script src="js/index.js"></script>
+
+        <script>
+            window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+            ga('create','UA-XXXXX-Y','auto');ga('send','pageview')
+        </script>
+
+    </body>
+</html>
