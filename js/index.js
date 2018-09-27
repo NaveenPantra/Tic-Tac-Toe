@@ -289,4 +289,4 @@ let gameController = (function (modelCtrl, viewCtrl, checking) {
 (function () {
     gameController.init();
 })();
-});
+})();
