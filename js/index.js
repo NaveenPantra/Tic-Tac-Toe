@@ -1,5 +1,4 @@
 // Design Pattern: MVC
-(function() {
 let modelController = (function () {
     let data = [[' ', ' ', ' '],[' ', ' ', ' '],[' ', ' ', ' ']];
 
@@ -289,4 +288,4 @@ let gameController = (function (modelCtrl, viewCtrl, checking) {
 (function () {
     gameController.init();
 })();
-})();
+
