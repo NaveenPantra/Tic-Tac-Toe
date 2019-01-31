@@ -11,4 +11,7 @@ Simple Tic-Tac-Toe game with JavaScript.
 6. Actually doing it for automation but stopped in between for some...
 7. For the automation machineController is used in the code and not implemented.
 
+## Updated the  UI
+-check out in https://tic-tac-toe-js.netlify.com/
+
 # Thank you for reading
