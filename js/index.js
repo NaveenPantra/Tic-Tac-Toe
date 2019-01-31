@@ -1,6 +1,9 @@
 // Design Pattern: MVC
+
 let modelController = (function () {
     let data = [[' ', ' ', ' '],[' ', ' ', ' '],[' ', ' ', ' ']];
+    let playero = 0;
+    let playerx = 0;
 
     let resetData = function (turn) {
         data = [[' ', ' ', ' '],[' ', ' ', ' '],[' ', ' ', ' ']];
@@ -18,11 +21,22 @@ let modelController = (function () {
         logData: function () {
             return data;
         },
+
+        updatePlayero: function() {
+            return ++playero;
+        },
+
+        updatePlayerx: function() {
+            return ++playerx;
+        },
+
         reset: function() {
             resetData();
-        }
+        },
     }
 })();
+
+
 
 
 // userInterface Controller
@@ -31,7 +45,25 @@ let viewController = (function (modelCtrl) {
         container: ".container",
         won: ".won",
         loss: ".loss",
-        tie: '.tie'
+        tie: '.tie',
+        win: ".win",
+        hide: "hide",
+        playerWin: ".player-win",
+        turn: ".turn",
+        roundStat: "round-stat",
+        playerOScore: "player-o-score",
+        playerXScore: "player-x-score",
+        playerO: "player-o",
+        playerX: "player-x",
+        winNote: "win-note",
+    };
+
+    let DOMElements = {
+        roundStat: document.querySelector(`.${DOMStrings.roundStat}`),
+        playerOScore: document.querySelector(`.${DOMStrings.playerOScore}`),
+        playerXScore: document.querySelector(`.${DOMStrings.playerXScore}`),
+        playerO: document.querySelector(`.${DOMStrings.playerO}`),
+        playerX: document.querySelector(`.${DOMStrings.playerX}`),
     };
 
     let insert = function (row, col, turn) {
@@ -39,23 +71,17 @@ let viewController = (function (modelCtrl) {
     };
 
     let tieDispaly = function () {
-        document.querySelector(DOMStrings.tie).style.display='inline-block';
+        // document.querySelector(DOMStrings.tie).style.display='inline-block';
+        DOMElements.roundStat.classList.remove(DOMStrings.hide);
+        DOMElements.roundStat.textContent = "Game Tied";
+
     };
 
     let wonDispaly = function (turn) {
-        console.log(turn);
-    //    "'" + turn + "'" + "   Won the game :)  "
-        document.querySelector(DOMStrings.won).innerText ="'"+ turn + "'" + "     Won the game...   : )";
-        document.querySelector(DOMStrings.won).style.display='inline-block';
-        turn = (turn === 'o')? 'x':'o';
-        document.querySelector(DOMStrings.loss).textContent = "'" + turn + "'" + "    Loose the game...    : (";
-        document.querySelector(DOMStrings.loss).style.display='inline-block';
-
+        DOMElements.roundStat.classList.remove(DOMStrings.hide);
+        DOMElements.roundStat.textContent = `Player ${turn.toUpperCase()} Won`;
+        changeTurn(turn);
     };
-
-    // let lossDispaly = function () {
-    //     document.querySelector(DOMStrings.loss).style.display='inline-block';
-    // };
     let clearScreen = function () {
         let i, j, element;
         for(i = 0; i < 3; i++) {
@@ -64,12 +90,33 @@ let viewController = (function (modelCtrl) {
                 document.getElementById(element).textContent="";
             }
         }
-        document.querySelector(DOMStrings.won).style.display= "none";
-        document.querySelector(DOMStrings.loss).style.display= "none";
-        document.querySelector(DOMStrings.tie).style.display= "none";
+        DOMElements.roundStat.classList.add(DOMStrings.hide);
         modelCtrl.reset();
     };
 
+    let changeTurn = (turn) => {
+        if (turn === 'o') {
+            document.querySelector(DOMStrings.turn).style.left = "18%";
+        } else {
+            document.querySelector(DOMStrings.turn).style.left = "68%";
+        }
+    };
+
+    const updateScore = (turn, score) => {
+        if (turn === "o") {
+            DOMElements.playerOScore.textContent = score;
+        } else if (turn === "x") {
+            DOMElements.playerXScore.textContent = score;
+        }
+    };
+
+    const animateScoreBox = (turn) => {
+        const player = document.querySelector(`.player-${turn}`);
+        player.classList.add(DOMStrings.winNote);
+        setTimeout(() => {
+            player.classList.remove(DOMStrings.winNote)
+        }, 2000);
+    };
 
     return {
         getDOMStrings: function () {
@@ -88,22 +135,37 @@ let viewController = (function (modelCtrl) {
             wonDispaly(turn);
         },
 
+        changeTurn: function(turn) {
+            changeTurn(turn);
+        },
+
         loss: function () {
             lossDispaly();
         },
 
         reset: function() {
             clearScreen();
-        }
+        },
+
+        updateScore: function (turn, score) {
+            updateScore(turn, score);
+        },
+
+        animateScoreBox: function (turn) {
+            animateScoreBox(turn);
+        },
+
     };
 })(modelController);
+
+
 
 
 let checking = (function (viewCtrl, modelCtrl) {
     let checkIns = function (row, col, turn) {
         let data, check = false;
         data = modelCtrl.getData();
-        check = data[row][col] == ' ' ? true : false;
+        check = data[row][col] === ' ';
         if(check === true) {
             let check;
             modelCtrl.putdata(row, col, turn);
@@ -170,7 +232,6 @@ let checking = (function (viewCtrl, modelCtrl) {
                     count++;
                 } else {
                     count = 0;
-                    continue;
                 }
             }
             if(count === 3) {
@@ -182,20 +243,14 @@ let checking = (function (viewCtrl, modelCtrl) {
 
     let checkForDiag = function (data, turn) {
         let d0 = data[0][0], d1 = data[1][1], d2 = data[2][2];
-        if(turn === d0 && turn === d1 && turn === d2) {
-            return true;
-        }
-        return false;
+        return turn === d0 && turn === d1 && turn === d2;
+
 
     };
 
     let checkForRdiag = function (data, turn) {
         let d0 = data[0][2], d1 = data[1][1], d2 = data[2][0];
-        if(turn === d0 && turn === d1 && turn === d2) {
-            console.log("won!");
-            return true;
-        }
-        return false;
+        return turn === d0 && turn === d1 && turn === d2;
     };
 
     return {
@@ -212,24 +267,21 @@ let checking = (function (viewCtrl, modelCtrl) {
 
 // machineControl
 // For automation (Inprogress)
-let machineControl = (function (modelCtrl, viewCtrl, checking) {
-    let data = modelCtrl.getData();
-    let DOMStrings = viewCtrl.getDOMStrings();
-    let randomPoint = function() {
-        let pos = Math.floor(Math.random() * 9);
-
-    };
-})(modelController, viewController, checking);
-
-
-
+// let machineControl = (function (modelCtrl, viewCtrl, checking) {
+//     let data = modelCtrl.getData();
+//     let DOMStrings = viewCtrl.getDOMStrings();
+//     let randomPoint = function() {
+//         let pos = Math.floor(Math.random() * 9);
+//
+//     };
+// })(modelController, viewController, checking);
 
 
 
 
 // Controller
 let gameController = (function (modelCtrl, viewCtrl, checking) {
-    let turn = 'x';
+    let turn = 'o';
     let setupEventListener = function() {
         let DOMStrings = viewCtrl.getDOMStrings();
         document.querySelector(DOMStrings.container).addEventListener('click', check);
@@ -247,12 +299,23 @@ let gameController = (function (modelCtrl, viewCtrl, checking) {
         let item_id, a, element, is_ins = 1, x = 'x', o = 'o';
         item_id = event.target.id;
         a = item_id.split('-');
-        console.log(item_id);
         element = document.getElementById(item_id);
-        is_ins = checking.checkIns(parseInt(a[0]), parseInt(a[1]), turn);
-        if(is_ins == 1) {
+        try {
+            is_ins = checking.checkIns(parseInt(a[0]), parseInt(a[1]), turn);
+        } catch (err) {
+        }
+        if(is_ins === 1) {
             turn = (turn === 'o') ? 'x' : 'o';
+            viewCtrl.changeTurn(turn);
         } else if(is_ins === 2) {
+            let score = 0;
+            if (turn === "x") {
+                score = modelCtrl.updatePlayerx();
+            } else if (turn === "o") {
+                score = modelCtrl.updatePlayero();
+            }
+            viewCtrl.animateScoreBox(turn);
+            viewCtrl.updateScore(turn, score);
             removeEventListeners();
         }
     };
@@ -260,16 +323,13 @@ let gameController = (function (modelCtrl, viewCtrl, checking) {
     let clearScreen = function () {
         viewCtrl.reset();
         turn = (turn === 'o')?'x':'o';
-    }
+        viewCtrl.changeTurn(turn);
+    };
 
 
 
     return {
         init: function() {
-            let DOMStrings = viewCtrl.getDOMStrings();
-            document.querySelector(DOMStrings.won).style.display= "none";
-            document.querySelector(DOMStrings.loss).style.display= "none";
-            document.querySelector(DOMStrings.tie).style.display= "none";
             setupEventListener();
         },
 
@@ -288,4 +348,3 @@ let gameController = (function (modelCtrl, viewCtrl, checking) {
 (function () {
     gameController.init();
 })();
-
