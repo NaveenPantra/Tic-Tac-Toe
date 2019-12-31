@@ -1,6 +1,8 @@
 # Tic-Tac-Toe
 Simple Tic-Tac-Toe game with JavaScript.
 
+Checkout in https://tic-tac-toe-js.netlify.com/
+
 ## About Project
 
 1. Design Pattern MVC (Model View Controller).
@@ -11,7 +13,5 @@ Simple Tic-Tac-Toe game with JavaScript.
 6. Actually doing it for automation but stopped in between for some...
 7. For the automation machineController is used in the code and not implemented.
 
-## Updated the  UI
--check out in https://tic-tac-toe-js.netlify.com/
-
-# Thank you for reading
+### ScreenShots
+<img src="./img/screenshots/Tic_Tac_Toe.png" width="100%">
